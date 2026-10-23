@@ -38,21 +38,39 @@ If no supported marker is found, render the source normally. Never guess missing
 
 ## Workflow
 
-1. Identify each input file and use its extension for syntax highlighting.
-2. Choose the mode and output location requested by the user.
-3. Generate the requested PDF or PDFs.
+1. Identify each input file, keep its exact name and path, and use its extension for syntax highlighting. Quote paths that contain spaces.
+2. Choose exact or handout mode and the output location requested by the user. The default output folder is `pdf_output/`.
+3. Generate one PDF per input (normally `<input-name>.pdf`; duplicate basenames receive a disambiguating suffix), or `combined_code.pdf` when `--combine` is requested. Explain the output location in your response.
 4. Confirm each PDF exists and is non-empty. When tools permit, extract text and render pages to inspect layout, line numbering, output separation, and page breaks.
 5. After converter changes, run `python -m unittest discover -s tests -v`.
 6. Report checks performed and limitations accurately; do not claim visual inspection unless it was performed.
 
-## Commands
+## Usage examples
 
-```bash
+Run commands from the repository root. Replace the example filenames with the actual input paths. Relative paths use the current folder; quote paths that contain spaces.
+
+Exact mode is the default and creates `pdf_output/example.pdf`:
+
+```powershell
 python scripts/code_to_pdf.py example.py
-python scripts/code_to_pdf.py --mode handout example.py
-python scripts/code_to_pdf.py --mode handout --hide-local-paths example.py
-python scripts/code_to_pdf.py --mode handout example.py other.cpp app.js
-python scripts/code_to_pdf.py --combine --mode handout example.py other.cpp
-python scripts/code_to_pdf.py --mode handout --landscape wide.sql
-python scripts/code_to_pdf.py --mode handout --font-size 10 example.cpp
 ```
+
+Create a handout PDF in a chosen folder:
+
+```powershell
+python scripts/code_to_pdf.py --mode handout --output-dir ./pdf_output example.py
+```
+
+Convert several files to separate PDFs. This creates `first.pdf`, `second.pdf`, and `app.pdf` in `pdf_output`:
+
+```powershell
+python scripts/code_to_pdf.py --mode handout --output-dir ./pdf_output first.py second.cpp app.js
+```
+
+Combine those inputs into `pdf_output/combined_code.pdf`:
+
+```powershell
+python scripts/code_to_pdf.py --combine --mode handout --output-dir ./pdf_output first.py second.cpp app.js
+```
+
+A clear request to an AI assistant is: “Use the Code-to-PDF skill to create separate handout PDFs for `first.py` and `second.cpp` in the `pdf_output` folder.”

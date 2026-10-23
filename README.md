@@ -21,31 +21,39 @@ The assistant needs access to Python and the dependencies listed above. If it ca
 
 ## Use as a Python utility
 
-Convert a source file to a PDF in `pdf_output/`:
+Run commands from the repository root. Replace the example filenames with your source file paths. Relative paths are resolved from the current folder; quote paths that contain spaces.
 
-```bash
+Convert one file in exact mode (the default) to `pdf_output/example.pdf`:
+
+```powershell
 python scripts/code_to_pdf.py example.py
 ```
 
-Create a practical handout, convert several files, or combine them into one PDF:
+Create a handout PDF in a chosen output folder:
 
-```bash
-python scripts/code_to_pdf.py --mode handout example.py
-python scripts/code_to_pdf.py --mode handout first.py second.cpp app.js
-python scripts/code_to_pdf.py --combine --mode handout first.py second.cpp
+```powershell
+python scripts/code_to_pdf.py --mode handout --output-dir ./pdf_output example.py
 ```
 
-Useful options:
+This creates `pdf_output/example.pdf`. Convert several files into separate PDFs:
 
-```bash
-python scripts/code_to_pdf.py --output-dir ./documents example.py
-python scripts/code_to_pdf.py --landscape wide_table.sql
-python scripts/code_to_pdf.py --font-size 10 example.cpp
-python scripts/code_to_pdf.py --no-line-numbers example.js
-python scripts/code_to_pdf.py --mode handout --hide-local-paths example.py
+```powershell
+python scripts/code_to_pdf.py --mode handout --output-dir ./pdf_output first.py second.cpp app.js
 ```
 
-Exact mode is the default and renders the complete source listing. Handout mode uses a topic-led title and can move a marked sample output block into a separate section. The converter does not run the source program, so any included output must be supplied in the source file.
+This creates `first.pdf`, `second.pdf`, and `app.pdf` in `pdf_output`. To combine the same inputs into one PDF instead:
+
+```powershell
+python scripts/code_to_pdf.py --combine --mode handout --output-dir ./pdf_output first.py second.cpp app.js
+```
+
+Combined mode creates `pdf_output/combined_code.pdf`. Other options include `--landscape`, `--font-size 10`, `--no-line-numbers`, and `--hide-local-paths`; for example:
+
+```powershell
+python scripts/code_to_pdf.py --mode handout --landscape --font-size 10 --no-line-numbers --output-dir ./pdf_output example.py
+```
+
+Exact mode is the default and renders the complete source listing. Handout mode tries to create a topic-based title from the source content, using the filename when it cannot identify a topic. It can also move a clearly marked output block into a separate section. The converter does not run the source program, so any included output must be supplied in the source file.
 
 ## Mark sample output in handout mode
 
